@@ -8,11 +8,12 @@ class ProduceView(web.View):
 
     async def post(self):
         params = await self.request.json()
-        await produce(self.request.app.loop, params["message"])
+        await produce(self.request.app, params["topic"], params["message"])
         
         data = {
             "status": "success",
-            "message": "message was sent successfully"
+            "topic": params["topic"],
+            "message": params["message"]
         }
         
         return web.json_response(data)

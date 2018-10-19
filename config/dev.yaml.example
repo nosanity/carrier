@@ -1,0 +1,13 @@
+kafka:
+    host: esb.u2035dev.ru
+    port: 9092
+    topic: carrier-test
+
+client:
+    host: localhost
+    port: 8090
+    protocol: http
+    url: /carrier/callback/
+
+host: 0.0.0.0
+port: 8080

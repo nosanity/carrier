@@ -15,7 +15,8 @@ async def send(app, params={}):
         )
         async with session.post(client_url, headers=headers, json=params) as response:
             if response.status == 200:
-                print(await response.json())
+                # print(await response.json())
+                print("client responds ok")
             else:
                 raise Exception("something went wrong")
 
@@ -47,7 +48,7 @@ async def consume(app):
     await consumer.start()
     try:
         async for msg in consumer:
-            # print("consumed: ", msg.topic, msg.partition, msg.offset, msg.key, msg.value, msg.timestamp)
+            print("consumed: ", msg.topic, msg.partition, msg.offset, msg.key, msg.value, msg.timestamp)
             params = {
                 'topic': msg.topic,
                 'partition': msg.partition,

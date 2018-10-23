@@ -7,6 +7,7 @@ routes = web.RouteTableDef()
 class ProduceView(web.View):
 
     async def post(self):
+        # TODO add validation
         params = await self.request.json()
         await produce(self.request.app, params["topic"], params["message"])
         

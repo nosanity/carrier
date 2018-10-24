@@ -22,6 +22,11 @@ def init_app(argv=None):
     
     return app
 
+def wsgi(config=None):
+    if config:
+        argv = [None, '--config', config]
+        return init_app(argv)
+
 def run(argv=None):
     app = init_app(argv)
     web.run_app(app, host=app['config']['host'], port=app['config']['port'])

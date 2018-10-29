@@ -2,23 +2,17 @@ import asyncio
 import aiohttp
 from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
 
+async def handle_client_response(response):
+    # await response.json()
+    if response.status != 200:
+        # TODO What to do when message wasn't delivered?
+        raise Exception("something went wrong")
+
 async def send(app, params={}):
     async with aiohttp.ClientSession() as session:
-        headers = {
-            'Content-Type': 'application/json'
-        }
-        client_url = "{}://{}:{}{}".format(
-            app['config']['client']['protocol'],
-            app['config']['client']['host'],
-            app['config']['client']['port'],
-            app['config']['client']['url']
-        )
-        async with session.post(client_url, headers=headers, json=params) as response:
-            if response.status == 200:
-                # print(await response.json())
-                print("client responds ok")
-            else:
-                raise Exception("something went wrong")
+        for consumer in app['consumers']:
+            async with session.post(consumer['url'], headers=consumer['headers'], json=params) as response:
+                await handle_client_response(response)
 
 async def produce(app, topic, msg):
     bootstrap_servers = "{}:{}".format(
@@ -36,12 +30,13 @@ async def produce(app, topic, msg):
         await producer.stop()
 
 async def consume(app):
+    topics = tuple(app['config']['kafka']['topics'])
     bootstrap_servers = "{}:{}".format(
         app['config']['kafka']['host'],
         app['config']['kafka']['port']
     )      
     consumer = AIOKafkaConsumer(
-        app['config']['kafka']['topic'],
+        *topics,
         loop=app.loop, 
         bootstrap_servers=bootstrap_servers,
     )

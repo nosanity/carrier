@@ -12,15 +12,17 @@ TRAFARET = T.Dict({
         T.Dict({
             'host': T.String(),
             'port': T.Int(),
-            'topic': T.String()
+            'topics': T.List(T.String())
         }),
-    T.Key('client'):
-        T.Dict({
-            'host': T.String(),
-            'port': T.Int(),
-            'protocol': T.String(),
-            'url': T.String(),
-        }),
+    T.Key('consumers'):
+        T.List(
+            T.Dict({
+                'host': T.String(),
+                'port': T.Int(),
+                'protocol': T.String(),
+                'url': T.String(),
+            }),
+        ),
     T.Key('host'): T.IP,
     T.Key('port'): T.Int(),
 })
@@ -41,3 +43,25 @@ def get_config(argv=None):
     config = commandline.config_from_options(options, TRAFARET)
 
     return config
+
+def generate_consumers_url(app):
+    headers = {
+        'Content-Type': 'application/json'
+    }
+    consumers = []
+    for consumer in app['config']['consumers']:
+        # headers['auth'] = "consumer token"
+        consumer_url = "{}://{}:{}{}".format(
+            consumer['protocol'],
+            consumer['host'],
+            consumer['port'],
+            consumer['url']
+        )
+        consumers.append(
+            {
+                'headers': headers,
+                'url': consumer_url
+            }
+        )
+
+    app['consumers'] = consumers

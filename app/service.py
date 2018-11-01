@@ -15,6 +15,7 @@ async def send(app, params={}):
                 await handle_client_response(response)
 
 async def produce(app, topic, msg):
+    ### TODO AIOKafkaProducer should be initialized once outside the method
     bootstrap_servers = "{}:{}".format(
         app['config']['kafka']['host'],
         app['config']['kafka']['port']
@@ -23,6 +24,7 @@ async def produce(app, topic, msg):
         loop=app.loop,
         bootstrap_servers=bootstrap_servers
     )
+    ###
     await producer.start()
     try:
         await producer.send_and_wait(topic, msg.encode())
@@ -30,6 +32,7 @@ async def produce(app, topic, msg):
         await producer.stop()
 
 async def consume(app):
+    # TODO how many times this method being called?
     topics = tuple(app['config']['kafka']['topics'])
     bootstrap_servers = "{}:{}".format(
         app['config']['kafka']['host'],

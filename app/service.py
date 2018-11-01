@@ -6,7 +6,7 @@ async def handle_client_response(response):
     # await response.json()
     if response.status != 200:
         # TODO What to do when message wasn't delivered?
-        raise Exception("something went wrong")
+        print("something went wrong during message delivering")
 
 async def send(app, params={}):
     async with aiohttp.ClientSession() as session:
@@ -27,7 +27,7 @@ async def produce(app, topic, msg):
     ###
     await producer.start()
     try:
-        await producer.send_and_wait(topic, msg.encode())
+        await producer.send_and_wait(topic, str(msg).encode())
     finally:
         await producer.stop()
 

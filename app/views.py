@@ -10,11 +10,10 @@ class ProduceView(web.View):
         # TODO validate incoming request
         params = await self.request.json()
         await produce(self.request.app, params["topic"], params["payload"])
-        
         data = {
             "status": "success",
             "topic": params["topic"],
-            "message": params["message"]
+            "message": params["payload"]
         }
         
         return web.json_response(data)

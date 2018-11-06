@@ -25,6 +25,7 @@ TRAFARET = T.Dict({
         ),
     T.Key('host'): T.IP,
     T.Key('port'): T.Int(),
+    T.Key('debug'): T.Bool(),
 })
 
 def get_config(argv=None):
@@ -50,7 +51,6 @@ def generate_consumers_url(app):
     }
     consumers = []
     for consumer in app['config']['consumers']:
-        # headers['auth'] = "consumer token"
         consumer_url = "{}://{}:{}{}".format(
             consumer['protocol'],
             consumer['host'],

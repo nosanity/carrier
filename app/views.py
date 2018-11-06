@@ -7,13 +7,16 @@ routes = web.RouteTableDef()
 class ProduceView(web.View):
 
     async def post(self):
-        # TODO validate incoming request
-        params = await self.request.json()
+        try: 
+            params = await self.request.json()
+        except ValueError:
+            return web.HTTPBadRequest()
+
+        if "topic" not in params or "payload" not in params:
+            return web.HTTPBadRequest()
+        if params["topic"] not in self.request.app["config"]["kafka"]["topics"]:
+            return web.HTTPBadRequest()
+
         await produce(self.request.app, params["topic"], params["payload"])
-        data = {
-            "status": "success",
-            "topic": params["topic"],
-            "message": params["payload"]
-        }
-        
-        return web.json_response(data)
+
+        return web.HTTPOk()

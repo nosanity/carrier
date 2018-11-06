@@ -2,6 +2,7 @@ from aiohttp import web
 from app.views import routes
 from app.service import consume
 from app.utils import get_config, generate_consumers_url
+from app import Producer
 
 async def start_background_tasks(app):
     app['kafka_consumer'] = app.loop.create_task(consume(app))
@@ -9,6 +10,7 @@ async def start_background_tasks(app):
 async def cleanup_background_tasks(app):
     app['kafka_consumer'].cancel()
     await app['kafka_consumer']
+    await Producer.get_producer().stop()
 
 def init_app(argv=None):
     app = web.Application(middlewares=[

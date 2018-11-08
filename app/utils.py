@@ -23,6 +23,16 @@ TRAFARET = T.Dict({
                 'url': T.String(),
             }),
         ),
+    T.Key('mysql'):
+        T.Dict({
+            'database': T.String(),
+            'user': T.String(),
+            'password': T.String(),
+            'host': T.String(),
+            'port': T.Int(),
+            'minsize': T.Int(),
+            'maxsize': T.Int(),
+        }),
     T.Key('host'): T.IP,
     T.Key('port'): T.Int(),
     T.Key('debug'): T.Bool(),

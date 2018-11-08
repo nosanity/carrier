@@ -1,6 +1,7 @@
 from aiohttp import web
 from app.views import routes
 from app.service import consume
+from app.db import init_db_pool, close_db_pool
 from app.utils import get_config, generate_consumers_url
 from app import Producer
 
@@ -22,7 +23,10 @@ def init_app(argv=None):
     generate_consumers_url(app)
 
     app.add_routes(routes) 
+
+    app.on_startup.append(init_db_pool)
     app.on_startup.append(start_background_tasks)
+    app.on_cleanup.append(close_db_pool)
     app.on_cleanup.append(cleanup_background_tasks)
     
     return app

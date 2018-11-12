@@ -33,9 +33,20 @@ TRAFARET = T.Dict({
             'minsize': T.Int(),
             'maxsize': T.Int(),
         }),
+    T.Key('email'):
+        T.Dict({
+            'host': T.String(),
+            'port': T.Int(),
+            'auth_required': T.Bool(),
+            'username': T.String(allow_blank=True),
+            'password': T.String(allow_blank=True),
+            'email_to_notify': T.String(),
+        }),
     T.Key('host'): T.IP,
     T.Key('port'): T.Int(),
     T.Key('debug'): T.Bool(),
+    T.Key('period_to_resend'): T.Int(),
+    T.Key('resend_limit'): T.Int(),
 })
 
 def get_config(argv=None):

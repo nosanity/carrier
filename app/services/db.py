@@ -1,11 +1,10 @@
 from aiomysql import create_pool
 
-async def execute(pool, query, commit=False):
-    async with pool.get() as conn:
+async def execute(pool, query):
+    async with pool.acquire() as conn:
         async with conn.cursor() as cursor:
             await cursor.execute(query)
-            if commit:
-                await conn.commit()
+            await conn.commit()
             return cursor
 
 async def all(pool, query):
@@ -17,7 +16,10 @@ async def one(pool, query):
     return await cursor.fetchone()
 
 async def insert(pool, query):
-    await execute(pool, query, commit=True)
+    await execute(pool, query)
+
+async def update(pool, query):
+    await execute(pool, query)
 
 async def init_db_pool(app):
     config = app['config']
@@ -28,7 +30,7 @@ async def init_db_pool(app):
         'user': config['mysql']['user'], 
         'password': config['mysql']['password'],
         'minsize': config['mysql']['minsize'],
-        'maxsize': config['mysql']['maxsize']             
+        'maxsize': config['mysql']['maxsize']      
     }
     app['db'] = await create_pool(**kwargs)
 

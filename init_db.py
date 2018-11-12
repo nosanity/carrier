@@ -18,7 +18,10 @@ def get_commands(user):
             "_value VARCHAR(1024) NOT NULL," \
             "_key VARCHAR(265)," \
             "_timestamp VARCHAR(20) NOT NULL," \
+            "consumer_url VARCHAR(512) NOT NULL," \
+            "consumer_headers VARCHAR(512) NOT NULL," \
             "attempts_to_resend INT DEFAULT 0 NOT NULL," \
+            "undelivered TINYINT DEFAULT 0 NOT NULL," \
             "created_at TIMESTAMP NOT NULL," \
             "updated_at TIMESTAMP NOT NULL" \
         ");"

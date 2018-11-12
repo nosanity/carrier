@@ -1,5 +1,5 @@
 from aiohttp import web
-from app.service import produce
+from app.services.kafka import produce
 
 routes = web.RouteTableDef()
 

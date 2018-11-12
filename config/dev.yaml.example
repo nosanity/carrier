@@ -24,6 +24,16 @@ mysql:
   minsize: 5
   maxsize: 10
 
+email:
+  host: smtp.localhost
+  port: 465
+  auth_required: no
+  username: ""
+  password: ""
+  email_to_notify: admin@domain.com
+
 host: 0.0.0.0
 port: 8080
 debug: yes
+period_to_resend: 10
+resend_limit: 5

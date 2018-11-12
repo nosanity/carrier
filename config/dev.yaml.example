@@ -32,6 +32,7 @@ email:
   password: ""
   email_to_notify: admin@domain.com
 
+token: secret_token
 host: 0.0.0.0
 port: 8080
 debug: yes

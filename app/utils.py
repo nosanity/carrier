@@ -42,6 +42,7 @@ TRAFARET = T.Dict({
             'password': T.String(allow_blank=True),
             'email_to_notify': T.String(),
         }),
+    T.Key('token'): T.String(),
     T.Key('host'): T.IP,
     T.Key('port'): T.Int(),
     T.Key('debug'): T.Bool(),

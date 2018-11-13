@@ -21,6 +21,7 @@ TRAFARET = T.Dict({
                 'port': T.Int(),
                 'protocol': T.String(),
                 'url': T.String(),
+                'token': T.String(allow_blank=True),
             }),
         ),
     T.Key('mysql'):
@@ -73,6 +74,7 @@ def generate_consumers_url(app):
     }
     consumers = []
     for consumer in app['config']['consumers']:
+        headers['Authorization'] = consumer['token']
         consumer_url = "{}://{}:{}{}".format(
             consumer['protocol'],
             consumer['host'],

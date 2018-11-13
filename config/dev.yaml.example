@@ -10,10 +10,12 @@ consumers:
     port: 8090
     protocol: http
     url: /carrier-django/callback/
+    token: secret_token
   - host: localhost
     port: 8091
     protocol: http
     url: /carrier-django/callback/
+    token: secret_token
 
 mysql:
   database: carrier

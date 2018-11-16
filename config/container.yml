@@ -1,0 +1,42 @@
+kafka:
+  host: esb.u2035dev.ru
+  port: 9092
+  topics: 
+    - carrier-test
+    - carrier-new-name
+
+consumers:
+  - host: localhost
+    port: 8090
+    protocol: http
+    url: /carrier-django/callback/
+    token: token1
+  - host: localhost
+    port: 8091
+    protocol: http
+    url: /carrier-django/callback/
+    token: token2
+
+mysql:
+  database: carrier
+  user: root
+  password: root
+  host: db
+  port: 3306
+  minsize: 5
+  maxsize: 10
+
+email:
+  host: smtp.mailtrap.io
+  port: 465
+  auth_required: yes
+  username: bb76d3968773fd
+  password: 970799bc0d62eb
+  email_to_notify: lubyanov@gmail.com
+  
+token: q#IzQYJhGUc@tZ=zK&Ct
+host: 0.0.0.0
+port: 8080
+debug: yes
+period_to_resend: 3
+resend_limit: 3

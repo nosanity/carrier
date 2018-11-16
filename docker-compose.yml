@@ -11,8 +11,7 @@ services:
       - db
     environment:
       - CONFIG=container
-    depends_on:
-      - db
+    restart: on-failure
   db:
     image: mysql:5.7
     environment:

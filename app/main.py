@@ -1,5 +1,4 @@
 import os
-from time import sleep
 from aiohttp import web
 from app import Producer
 from app.views import routes
@@ -40,7 +39,6 @@ def container():
     force_db_init = os.environ.get('FORCE_DB_INIT', None)
     if config:
         argv = [None, '--config', config]
-        sleep(10) # dirty hack
         db = DatabaseStartup(argv, force_db_init)
         db.initialize_db()
         db.close_connection()

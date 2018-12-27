@@ -33,7 +33,7 @@ class ProduceView(web.View):
 
 
 @routes.view('/proxy/')
-class ProduceView(web.View):
+class ProxyView(web.View):
 
     async def post(self):
         header = self.request.headers.get('Authorization', '')

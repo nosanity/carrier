@@ -40,3 +40,4 @@ port: 8080
 debug: yes
 period_to_resend: 3
 resend_limit: 3
+sentry_dsn: ""

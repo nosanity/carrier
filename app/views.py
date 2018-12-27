@@ -1,4 +1,8 @@
+from datetime import datetime
+
 from aiohttp import web
+from sentry_sdk import capture_message
+
 from app.services.kafka import produce
 
 routes = web.RouteTableDef()
@@ -26,3 +30,50 @@ class ProduceView(web.View):
             return web.HTTPOk()
         else:
             return web.HTTPUnauthorized()
+
+
+@routes.view('/proxy/')
+class ProxyView(web.View):
+
+    async def post(self):
+        header = self.request.headers.get('Authorization', '')
+        splitted_header = header.split()
+        if not header or len(splitted_header) != 2 or splitted_header[0] != 'Bearer' or \
+                splitted_header[1] != self.request.app["config"]["token"]:
+            return web.HTTPUnauthorized()
+
+        topic = self.request.headers.get('X-Kafka-Topic', '')
+        if not topic:
+            capture_message("Request without X-Kafka-Topic header.", level="warning")
+            return web.HTTPBadRequest(text='"X-Kafka-Topic" header is required.')
+
+        try:
+            data = await self.request.json()
+        except ValueError:
+            return web.HTTPBadRequest(text='Body must be valid JSON.')
+
+        id_ = data.get('id', None)
+        if not id_:
+            return web.HTTPBadRequest(text='"id" is required parameter.')
+
+        stored = data.get('stored', None)
+        try:
+            stored_dt = datetime.strptime(stored, "%Y-%m-%dT%H:%M:%S.%fZ")
+        except ValueError:
+            return web.HTTPBadRequest(text='"stored" must be datetime string '
+                                           'in "%Y-%m-%dT%H:%M:%S%.fZ" format."')
+        except TypeError:
+            return web.HTTPBadRequest(text='"stored" is required.')
+
+        payload = {
+            "action": "create",
+            "timestamp": stored_dt.isoformat(),
+            "source": "lrs",
+            "type": "lrs.create",
+            "id":
+                {"id": id_}
+            ,
+            "title": ""
+        }
+        await produce(self.request.app, topic, payload)
+        return web.HTTPOk()

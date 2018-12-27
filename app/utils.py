@@ -49,6 +49,7 @@ TRAFARET = T.Dict({
     T.Key('debug'): T.Bool(),
     T.Key('period_to_resend'): T.Int(),
     T.Key('resend_limit'): T.Int(),
+    T.Key('sentry_dsn'): T.String(allow_blank=True),
 })
 
 def get_config(argv=None):

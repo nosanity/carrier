@@ -7,6 +7,8 @@ from app.services.failed_messages import handle_failed_messages_by_schedule
 from app.services.db import init_db_pool, close_db_pool
 from app.utils import get_config, generate_consumers_url
 from db.helpers import DatabaseStartup
+import sentry_sdk
+from sentry_sdk.integrations.aiohttp import AioHttpIntegration
 
 async def start_background_tasks(app):
     app['kafka_consumer'] = app.loop.create_task(consume(app))
@@ -15,6 +17,14 @@ async def start_background_tasks(app):
 async def cleanup_background_tasks(app):
     app['kafka_consumer'].cancel()
     await app['kafka_consumer']
+
+def init_sentry(app):
+    sentry_sdk.init(
+        dsn=app['config']['sentry_dsn'],
+        integrations=[AioHttpIntegration()],
+        environment='carrier'
+    )
+
 
 def init_app(argv=None):
     app = web.Application(middlewares=[
@@ -51,4 +61,5 @@ def wsgi(config=None):
 
 def run(argv=None):
     app = init_app(argv)
+    init_sentry(app)
     web.run_app(app, host=app['config']['host'], port=app['config']['port'])

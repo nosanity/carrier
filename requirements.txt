@@ -6,6 +6,7 @@ asn1crypto==0.24.0
 astroid==2.0.4
 async-timeout==3.0.1
 attrs==18.2.0
+certifi==2018.11.29
 cffi==1.11.5
 chardet==3.0.4
 cryptography==2.3.1
@@ -20,8 +21,10 @@ pycparser==2.19
 pylint==2.1.1
 PyMySQL==0.9.2
 PyYAML==3.13
+sentry-sdk==0.6.5
 six==1.11.0
 trafaret==1.2.0
 trafaret-config==2.0.2
+urllib3==1.24.1
 wrapt==1.10.11
 yarl==1.2.6

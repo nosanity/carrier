@@ -65,13 +65,17 @@ class ProxyView(web.View):
         except TypeError:
             return web.HTTPBadRequest(text='"stored" is required.')
 
+        authority = data.get('authority', None)
+        if not authority:
+            return web.HTTPBadRequest(text='"authority" is required parameter.')
+
         payload = {
             "action": "create",
             "timestamp": stored_dt.isoformat(),
             "source": "lrs",
-            "type": "lrs.create",
+            "type": "create",
             "id":
-                {"id": id_}
+                {"id": id_, 'authority': authority}
             ,
             "title": ""
         }

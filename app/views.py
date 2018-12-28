@@ -69,7 +69,7 @@ class ProxyView(web.View):
             "action": "create",
             "timestamp": stored_dt.isoformat(),
             "source": "lrs",
-            "type": "lrs.create",
+            "type": "create",
             "id":
                 {"id": id_}
             ,

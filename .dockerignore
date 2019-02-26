@@ -1,0 +1,6 @@
+# Created by .ignore support plugin (hsz.mobi)
+.git
+docker-builder.sh
+README.md
+Dockerfile
+docker-compose.yml

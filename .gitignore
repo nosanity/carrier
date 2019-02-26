@@ -1,5 +1,5 @@
 .vscode
 venv
 __pycache__
-dev.yml
+config/*.yml
 .DS_Store

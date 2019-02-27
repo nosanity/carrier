@@ -2,4 +2,5 @@
 venv
 __pycache__
 config/*.yml
+!config/openshift.yml
 .DS_Store

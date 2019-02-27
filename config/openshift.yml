@@ -1,0 +1,61 @@
+kafka:
+  host: kafka
+  port: 9092
+  topics:
+      - uploads
+      - teos
+      - fs
+      - rs
+      - rt
+      - sso
+      - lrs
+
+consumers:
+  - host: fact-storage
+    port: 80
+    protocol: http
+    url: /carrier/callback/
+    token: secret_token
+
+  - host: recalgorithm
+    port: 80
+    protocol: http
+    url: /carrier-django/callback/
+    token: secret_token
+
+  - host: interpreter
+    port: 80
+    protocol: http
+    url: /carrier-django/callback/
+    token: secret_token
+
+  - host: fact-handlers
+    port: 80
+    protocol: http
+    url: /carrier-django/callback/
+    token: secret_token
+
+mysql:
+  database: carrier
+  user: root
+  password: root
+  host: mysql
+  port: 3306
+  minsize: 5
+  maxsize: 10
+
+email:
+  host: smtp.mailtrap.io
+  port: 465
+  auth_required: yes
+  username: bb76d3968773fd
+  password: 970799bc0d62eb
+  email_to_notify: lubyanov@gmail.com
+
+token: secret_token
+host: 0.0.0.0
+port: 80
+debug: yes
+period_to_resend: 10
+resend_limit: 5
+sentry_dsn: "https://d43a5175811a4c5faa8720cc8b51cde7:ef6c456d69bf4d4282d399a855b23e11@sentry-bifok7.2035.university/19"

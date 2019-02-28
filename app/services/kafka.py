@@ -1,6 +1,7 @@
 import aiohttp
+import asyncio
 from app import Producer
-from aiokafka import AIOKafkaConsumer
+from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 from app.services import failed_messages
 
 async def produce(app, topic, msg):
@@ -53,3 +54,22 @@ async def consume(app):
             await notify_consumers(app, params)
     finally:
         await consumer.stop()
+
+
+async def check_produce(app):
+    """
+    Проверка запросов к брокеру кафки с таймаутами 1, 2, 4, 8 секунд. Возвращает минимальный таймаут,
+    с которым удалось установить связь
+    """
+    bootstrap_servers = "{}:{}".format(app['config']['kafka']['host'], app['config']['kafka']['port'])
+    timeout = 1000
+    while timeout <= 8000:
+        producer = AIOKafkaProducer(loop=app.loop, bootstrap_servers=bootstrap_servers, request_timeout_ms=timeout)
+        try:
+            await producer.start()
+        except:
+            timeout *= 2
+        else:
+            await asyncio.sleep(.01)
+            await producer.stop()
+            return timeout

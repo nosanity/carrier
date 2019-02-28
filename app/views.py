@@ -3,7 +3,7 @@ from datetime import datetime
 from aiohttp import web
 from sentry_sdk import capture_message
 
-from app.services.kafka import produce
+from app.services.kafka import produce, check_produce
 
 routes = web.RouteTableDef()
 
@@ -81,3 +81,17 @@ class ProxyView(web.View):
         }
         await produce(self.request.app, topic, payload)
         return web.HTTPOk()
+
+
+@routes.view('/api/check/')
+class CheckProduceView(web.View):
+    async def post(self):
+        if 'Authorization' in self.request.headers and \
+            self.request.headers['Authorization'] == self.request.app["config"]["token"]:
+
+            res = await check_produce(self.request.app)
+            if res:
+                return web.HTTPOk(body=str(res))
+            return web.HTTPGatewayTimeout()
+        else:
+            return web.HTTPUnauthorized()
